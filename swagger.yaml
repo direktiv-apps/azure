@@ -1,0 +1,206 @@
+swagger: "2.0"
+info:
+  description: Azure's CLI in Direktiv
+  title: azure
+  version: "1.0"
+  x-direktiv-meta:
+    container: gcr.io/direktiv/apps/azure
+    maintainer: |-
+      [direktiv.io](https://www.direktiv.io) 
+    issues: https://github.com/direktiv-apps/azure/issues
+    url: https://github.com/direktiv-apps/azure  
+    categories:
+    - cloud
+    - azure
+    license: |-
+      [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+    long-description: >-
+      This function provides Azure's cli. The supported authentication mechanism is via service principal. 
+      This requires user and tenant ID and a secret. How to create a service principal for Azure is explained 
+      [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+paths:
+  /: 
+    delete:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          description: |
+            On cancel Direktiv sends a DELETE request to
+            the action with id in the header
+      x-direktiv:
+        cancel: echo 'cancel {{ .DirektivActionID }}'
+      responses:
+        200:
+    post:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          default: development
+          description: |
+            direktiv action id is an UUID. 
+            For development it can be set to 'development'
+        - name: Direktiv-TempDir
+          in: header
+          type: string
+          default: /tmp
+          description: |
+            direktiv temp dir is the working directory for that request
+            For development it can be set to e.g. '/tmp'
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              files:
+                type: array
+                items:
+                  $ref: '#/definitions/direktivFile'
+                description: File to create before running commands.
+              world:
+                type: string
+              auth: 
+                type: object
+                properties:
+                  user:
+                    type: string
+                    description: The application ID of the app registration for the principal
+                    example: a433dd122-bcdf-1605-160b-09717b123456
+                  password:
+                    type: string
+                    description: The secret created under "Certificates & Secrets"
+                    example: S0m3~Cr8zy~P855word
+                  tenant:
+                    type: string
+                    description: Azure tenant ID
+                    example: a433dd122-bcdf-1605-160b-09717b123456
+              commands:
+                type: array
+                description: Array of commands.
+                items:
+                  type: object
+                  properties:
+                    command:
+                      type: string
+                      description: Command to run
+                      # ADD EXAMPLE HERE
+                    silent: 
+                      type: boolean
+                      description: If set to false the command will not print output to logs.
+                      default: false
+                    print: 
+                      type: boolean
+                      description: If set to false the command will not print the full command with arguments to logs.
+                      default: true
+                    continue: 
+                      type: boolean
+                      description: Stops excecution if command fails, otherwise proceeds with next command 
+      # direktiv code generation is configured here
+      x-direktiv-function: |-
+        functions:
+        - id: azure
+          image: gcr.io/direktiv/apps/azure:1.0
+          type: knative-workflow
+      x-direktiv-examples:
+        # ADD MORE EXAMPLES HERE
+        - title: Basic
+          content: |-
+            - id: azure
+              type: action
+              action:
+                function: azure
+                secrets: ["azureUser", "azurePassword", "azureTenantID"]
+                input: 
+                  auth:
+                    user: jq(.secrets.azureUser)
+                    password: jq(.secrets.azurePassword)
+                    tentant: jq(.secrets.azureTenantID)
+                  commands:
+                  - command: az vm list --output json
+      x-direktiv-secrets:
+        - name: azureUser
+          description: User ID of the app for the service 
+        - name: azurePassword
+          description: >-
+            The password is the token generated in "Certificates & secrets" in "App registrations".
+            The app needs to have a role assigned in the subscription to work. 
+        - name: azureTenantID
+          description: Tenant ID provided by Azure. 
+      x-direktiv:  
+        cmds:
+        - action: exec
+          exec: az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}
+          print: false
+          silent: false
+          continue: false
+        - action: foreach
+          loop: .Commands
+          exec: '{{ .Item.Command }}'
+          silent: '{{ .Item.Silent }}'
+          print: '{{ .Item.Print }}'
+          continue: '{{ .Item.Continue }}'
+        output: |
+          {
+            "azure": {{ index . 1 | toJson }}
+          }
+      x-direktiv-errors:
+        io.direktiv.command.error: Command execution failed
+        io.direktiv.output.error: Template error for output generation of the service
+        io.direktiv.ri.error: Can not create information object from request
+      responses:
+        200:
+          description: List of executed commands.
+          examples:
+            azure:
+            - result: '{ "timeCreated": "2022-07-13T10:50:58.536494+00:00" }'
+              success: true
+          schema:
+            type: object
+            properties:
+              azure:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - success
+                  - result
+                  properties:
+                    success:
+                      type: boolean
+                    result:
+                      additionalProperties: {}
+        default:
+          description: generic error response
+          headers:
+            Direktiv-ErrorCode:
+              type: string
+            Direktiv-ErrorMessage:
+              type: string
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  direktivFile:
+    type: object
+    x-go-type:
+      type: DirektivFile
+      import:
+        package: github.com/direktiv/apps/go/pkg/apps 
+  error:
+    type: object
+    required:
+      - errorCode
+      - errorMessage
+    properties:
+      errorCode:
+        type: string
+      errorMessage:
+        type: string

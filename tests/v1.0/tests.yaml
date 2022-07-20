@@ -1,0 +1,21 @@
+url: ""
+functions:
+- type: knative-workflow
+  id: azure
+  image: gcr.io/direktiv/apps/azure:1.0
+states:
+- id: state0
+  type: action
+  action:
+    function: azure
+    input:
+      auth:
+        password: jq(.secrets.azurePassword)
+        tentant: jq(.secrets.azureTenantID)
+        user: jq(.secrets.azureUser)
+      commands:
+      - command: az vm list --output json
+    secrets:
+    - azureUser
+    - azurePassword
+    - azureTenantID

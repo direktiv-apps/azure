@@ -1,0 +1,13 @@
+url: ""
+functions:
+- type: subflow
+  id: call-karate
+  workflow: tests
+start:
+  type: event
+  state: call-subflow
+  event:
+    type: io.direktiv.function.test
+    context:
+      function: azure
+      version: "1.0"
