@@ -13,7 +13,7 @@ RUN cd src && \
 
 FROM mcr.microsoft.com/azure-cli:2.38.0
 
-# RUN apt-get update && apt-get install ca-certificates -y
+RUN az config set extension.use_dynamic_install=yes_without_prompt
 
 # DON'T CHANGE BELOW 
 COPY --from=build /application /bin/application
