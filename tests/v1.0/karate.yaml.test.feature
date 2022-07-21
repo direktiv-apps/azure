@@ -17,16 +17,16 @@ Scenario: get request
 	And header Direktiv-TempDir = '/tmp'
 	And request
 	"""
-	{
+	{	
 		"auth": {
 			"user": "#(azureUser)",
 			"password": "#(azurePassword)",
 			"tenant": "#(azureTenantID)"
 		},
 		"commands": [
-		{	
-			"command": "az vm list --output json",
-			"silent": false,
+		{
+			"command": "az version",
+			"silent": true,
 			"print": false,
 		}
 		]

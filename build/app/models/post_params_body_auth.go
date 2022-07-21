@@ -8,8 +8,10 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // PostParamsBodyAuth post params body auth
@@ -19,19 +21,66 @@ type PostParamsBodyAuth struct {
 
 	// The secret created under "Certificates & Secrets"
 	// Example: S0m3~Cr8zy~P855word
-	Password string `json:"password,omitempty"`
+	// Required: true
+	Password *string `json:"password"`
 
 	// Azure tenant ID
 	// Example: a433dd122-bcdf-1605-160b-09717b123456
-	Tenant string `json:"tenant,omitempty"`
+	// Required: true
+	Tenant *string `json:"tenant"`
 
 	// The application ID of the app registration for the principal
 	// Example: a433dd122-bcdf-1605-160b-09717b123456
-	User string `json:"user,omitempty"`
+	// Required: true
+	User *string `json:"user"`
 }
 
 // Validate validates this post params body auth
 func (m *PostParamsBodyAuth) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTenant(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateUser(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PostParamsBodyAuth) validatePassword(formats strfmt.Registry) error {
+
+	if err := validate.Required("password", "body", m.Password); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *PostParamsBodyAuth) validateTenant(formats strfmt.Registry) error {
+
+	if err := validate.Required("tenant", "body", m.Tenant); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *PostParamsBodyAuth) validateUser(formats strfmt.Registry) error {
+
+	if err := validate.Required("user", "body", m.User); err != nil {
+		return err
+	}
+
 	return nil
 }
 

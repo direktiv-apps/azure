@@ -13,6 +13,8 @@ RUN cd src && \
 
 FROM mcr.microsoft.com/azure-cli:2.38.0
 
+# RUN apt-get update && apt-get install ca-certificates -y
+
 # DON'T CHANGE BELOW 
 COPY --from=build /application /bin/application
 

@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Azure's CLI in Direktiv
+  description: Run azure in Direktiv
   title: azure
   version: "1.0"
   x-direktiv-meta:
@@ -10,14 +10,11 @@ info:
     issues: https://github.com/direktiv-apps/azure/issues
     url: https://github.com/direktiv-apps/azure  
     categories:
-    - cloud
-    - azure
+    - unknown
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
-      This function provides Azure's cli. The supported authentication mechanism is via service principal. 
-      This requires user and tenant ID and a secret. How to create a service principal for Azure is explained 
-      [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).
+      Run azure in Direktiv as a function
 consumes:
 - application/json
 produces:
@@ -59,17 +56,16 @@ paths:
           schema:
             type: object
             required:
-              - name
+              - auth
             properties:
               files:
                 type: array
                 items:
                   $ref: '#/definitions/direktivFile'
                 description: File to create before running commands.
-              world:
-                type: string
               auth: 
                 type: object
+                required: ["user", "password", "tenant"]
                 properties:
                   user:
                     type: string
@@ -121,9 +117,9 @@ paths:
                 secrets: ["azureUser", "azurePassword", "azureTenantID"]
                 input: 
                   auth:
-                    user: jq(.secrets.azureUser)
-                    password: jq(.secrets.azurePassword)
-                    tentant: jq(.secrets.azureTenantID)
+                    user: 'jq(.secrets.azureUser)'
+                    password: 'jq(.secrets.azurePassword)'
+                    tenant: 'jq(.secrets.azureTenantID)'
                   commands:
                   - command: az vm list --output json
       x-direktiv-secrets:
@@ -161,7 +157,9 @@ paths:
           description: List of executed commands.
           examples:
             azure:
-            - result: '{ "timeCreated": "2022-07-13T10:50:58.536494+00:00" }'
+            - result: # EXAMPLE RESULT HERE
+              success: true
+            - result: #  EXAMPLE RESULT HERE
               success: true
           schema:
             type: object

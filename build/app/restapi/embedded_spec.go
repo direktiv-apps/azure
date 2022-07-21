@@ -29,18 +29,17 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Azure's CLI in Direktiv",
+    "description": "Run azure in Direktiv",
     "title": "azure",
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "cloud",
-        "azure"
+        "unknown"
       ],
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).",
+      "long-description": "Run azure in Direktiv as a function",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -69,11 +68,16 @@ func init() {
             "schema": {
               "type": "object",
               "required": [
-                "name"
+                "auth"
               ],
               "properties": {
                 "auth": {
                   "type": "object",
+                  "required": [
+                    "user",
+                    "password",
+                    "tenant"
+                  ],
                   "properties": {
                     "password": {
                       "description": "The secret created under \"Certificates \u0026 Secrets\"",
@@ -125,9 +129,6 @@ func init() {
                   "items": {
                     "$ref": "#/definitions/direktivFile"
                   }
-                },
-                "world": {
-                  "type": "string"
                 }
               }
             }
@@ -162,7 +163,11 @@ func init() {
             "examples": {
               "azure": [
                 {
-                  "result": "{ \"timeCreated\": \"2022-07-13T10:50:58.536494+00:00\" }",
+                  "result": null,
+                  "success": true
+                },
+                {
+                  "result": null,
                   "success": true
                 }
               ]
@@ -210,7 +215,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: jq(.secrets.azureUser)\n        password: jq(.secrets.azurePassword)\n        tentant: jq(.secrets.azureTenantID)\n      commands:\n      - command: az vm list --output json",
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: 'jq(.secrets.azureUser)'\n        password: 'jq(.secrets.azurePassword)'\n        tenant: 'jq(.secrets.azureTenantID)'\n      commands:\n      - command: az vm list --output json",
             "title": "Basic"
           }
         ],
@@ -289,18 +294,17 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Azure's CLI in Direktiv",
+    "description": "Run azure in Direktiv",
     "title": "azure",
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "cloud",
-        "azure"
+        "unknown"
       ],
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).",
+      "long-description": "Run azure in Direktiv as a function",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -340,7 +344,11 @@ func init() {
             "examples": {
               "azure": [
                 {
-                  "result": "{ \"timeCreated\": \"2022-07-13T10:50:58.536494+00:00\" }",
+                  "result": null,
+                  "success": true
+                },
+                {
+                  "result": null,
                   "success": true
                 }
               ]
@@ -388,7 +396,7 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: jq(.secrets.azureUser)\n        password: jq(.secrets.azurePassword)\n        tentant: jq(.secrets.azureTenantID)\n      commands:\n      - command: az vm list --output json",
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: 'jq(.secrets.azureUser)'\n        password: 'jq(.secrets.azurePassword)'\n        tenant: 'jq(.secrets.azureTenantID)'\n      commands:\n      - command: az vm list --output json",
             "title": "Basic"
           }
         ],
@@ -484,7 +492,7 @@ func init() {
     "postParamsBody": {
       "type": "object",
       "required": [
-        "name"
+        "auth"
       ],
       "properties": {
         "auth": {
@@ -503,15 +511,17 @@ func init() {
           "items": {
             "$ref": "#/definitions/direktivFile"
           }
-        },
-        "world": {
-          "type": "string"
         }
       },
       "x-go-gen-location": "operations"
     },
     "postParamsBodyAuth": {
       "type": "object",
+      "required": [
+        "user",
+        "password",
+        "tenant"
+      ],
       "properties": {
         "password": {
           "description": "The secret created under \"Certificates \u0026 Secrets\"",

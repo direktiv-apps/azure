@@ -51,7 +51,7 @@ func NewAzureAPI(spec *loads.Document) *AzureAPI {
 	}
 }
 
-/*AzureAPI Azure's CLI in Direktiv */
+/*AzureAPI Run azure in Direktiv */
 type AzureAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context

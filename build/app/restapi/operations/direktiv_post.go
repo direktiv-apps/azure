@@ -163,8 +163,6 @@ func runCommand0(ctx context.Context,
 	ir := make(map[string]interface{})
 	ir[successKey] = false
 
-	ri.Logger().Infof("executing command")
-
 	at := accParamsTemplate{
 		*params.Body,
 		params.Commands,
@@ -200,8 +198,6 @@ type LoopStruct1 struct {
 
 func runCommand1(ctx context.Context,
 	params accParams, ri *apps.RequestInfo) ([]map[string]interface{}, error) {
-
-	ri.Logger().Infof("foreach command over .Commands")
 
 	var cmds []map[string]interface{}
 

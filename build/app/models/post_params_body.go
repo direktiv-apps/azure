@@ -13,6 +13,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // PostParamsBody post params body
@@ -21,16 +22,14 @@ import (
 type PostParamsBody struct {
 
 	// auth
-	Auth *PostParamsBodyAuth `json:"auth,omitempty"`
+	// Required: true
+	Auth *PostParamsBodyAuth `json:"auth"`
 
 	// Array of commands.
 	Commands []*PostParamsBodyCommandsItems `json:"commands"`
 
 	// File to create before running commands.
 	Files []apps.DirektivFile `json:"files"`
-
-	// world
-	World string `json:"world,omitempty"`
 }
 
 // Validate validates this post params body
@@ -56,8 +55,9 @@ func (m *PostParamsBody) Validate(formats strfmt.Registry) error {
 }
 
 func (m *PostParamsBody) validateAuth(formats strfmt.Registry) error {
-	if swag.IsZero(m.Auth) { // not required
-		return nil
+
+	if err := validate.Required("auth", "body", m.Auth); err != nil {
+		return err
 	}
 
 	if m.Auth != nil {

@@ -10,15 +10,13 @@ states:
     function: karate
     input:
       commands:
-      - command: java -DtestURL=jq(.host) -DazureUser=jq(.secrets.azureUser) -DazurePassword=jq(.secrets.azurePassword)
-          -DazureTenantID=jq(.secrets.azureTenantID) -jar /karate.jar test.feature
+      - command: java -DtestURL=jq(.host) -DazureSecret=jq(.secrets.azureSecret) -jar
+          /karate.jar test.feature
         print: false
       - command: cat target/karate-reports/karate-summary-json.txt
       logging: info
     secrets:
-    - azureUser
-    - azurePassword
-    - azureTenantID
+    - azureSecret
     files:
     - key: test.feature
       scope: workflow
