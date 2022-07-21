@@ -1,21 +1,23 @@
 url: ""
 functions:
 - type: subflow
-  id: call-tests
-  workflow: tests
+  id: call-karate
+  workflow: karate
 start:
   type: event
   state: call-subflow
   event:
     type: io.direktiv.function.test
     context:
-      function: 'azure'
-      version: '1.0'
+      function: azure
+      version: 1.0
 states:
 - id: call-subflow
   type: action
   action:
-    function: call-tests
+    function: call-karate
+    input:
+      host: jq(."io.direktiv.function.test".host)
   catch:
   - error: "*"
     transition: report-failure
@@ -24,7 +26,7 @@ states:
   type: generateEvent
   event:
     type: io.direktiv.function.test.result
-    source: tests
+    source: karate
     data: ''  
     context:
       result: success
@@ -34,7 +36,7 @@ states:
   type: generateEvent
   event:
     type: io.direktiv.function.test.result
-    source: tests
+    source: karate
     data: jq(.error)
     context:
       result: failure
