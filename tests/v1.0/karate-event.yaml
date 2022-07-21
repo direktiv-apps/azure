@@ -25,7 +25,7 @@ states:
 - id: report-success
   type: generateEvent
   event:
-    type: io.direktiv.function.test.result
+    type: io.direktiv.function.test.result.karate
     source: karate
     data: ''  
     context:
@@ -35,7 +35,7 @@ states:
 - id: report-failure
   type: generateEvent
   event:
-    type: io.direktiv.function.test.result
+    type: io.direktiv.function.test.result.karate
     source: karate
     data: jq(.error)
     context:
