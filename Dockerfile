@@ -15,6 +15,20 @@ FROM mcr.microsoft.com/azure-cli:2.38.0
 
 RUN az config set extension.use_dynamic_install=yes_without_prompt
 
+RUN az config set core.no_color=true
+RUN az config set core.only_show_errors=true
+
+RUN az extension add --name ssh
+RUN az extension add --name containerapp
+RUN az extension add --name k8s-configuration
+RUN az extension add --name k8s-extension
+RUN az extension add --name k8sconfiguration
+RUN az extension add --name connectedk8s
+RUN az extension add --name connectedmachine
+RUN az extension add --name connectedvmware
+
+RUN az extension list
+
 # DON'T CHANGE BELOW 
 COPY --from=build /application /bin/application
 

@@ -14,7 +14,32 @@ info:
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
-      Run azure in Direktiv as a function
+      This function provides Azure's cli. The supported authentication mechanism is via service principal. 
+      This requires user and tenant ID and a secret. How to create a service principal for Azure is explained 
+      [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).
+      If extensions are needed they are downloaded automatically and the followinf extensions are already installed:
+
+      - ssh
+
+      - containerapp
+      
+      - k8s-configuration
+      
+      - k8s-extension
+      
+      - k8sconfiguration
+      
+      - connectedk8s
+      
+      - connectedmachine
+      
+      - connectedvmware
+
+
+      The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.
+      If commands a long running Azure cli presents a "progress bar" in Stdout. In this case the response is not JSON because 
+      there are strings printed into the Stdout stream. In this case run the command to create and then a second to describe the 
+      created entity.
 consumes:
 - application/json
 produces:
@@ -114,14 +139,22 @@ paths:
               type: action
               action:
                 function: azure
-                secrets: ["azureUser", "azurePassword", "azureTenantID"]
                 input: 
-                  auth:
-                    user: 'jq(.secrets.azureUser)'
-                    password: 'jq(.secrets.azurePassword)'
-                    tenant: 'jq(.secrets.azureTenantID)'
                   commands:
-                  - command: az vm list --output json
+                  - command: Example of running azure
+        - title: Advanced
+          content: |-
+            - id: azure
+              type: action
+              action:
+                function: azure
+                input: 
+                  files:
+                  - name: hello.txt
+                    data: Hello World
+                    mode: '0755'
+                  commands:
+                  - command: Example of running azure
       x-direktiv-secrets:
         - name: azureUser
           description: User ID of the app for the service 

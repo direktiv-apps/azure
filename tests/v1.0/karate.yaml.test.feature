@@ -6,7 +6,7 @@ Background:
 * def azureUser = karate.properties['azureUser']
 * def azurePassword = karate.properties['azurePassword']
 * def azureTenantID = karate.properties['azureTenantID']
-
+* configure readTimeout = 240000
 
 Scenario: get request
 
@@ -24,10 +24,11 @@ Scenario: get request
 			"tenant": "#(azureTenantID)"
 		},
 		"commands": [
+		
 		{
-			"command": "az version",
-			"silent": true,
-			"print": false,
+			"command": "az containerapp env show --name del8 --resource-group app-svc",
+			"silent": false,
+			"print": true,
 		}
 		]
 	}

@@ -154,6 +154,9 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 		return ir, err
 	}
 
+	fmt.Printf("\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!OUTPUT1>> %v <<<\n\n\n", o.String())
+	fmt.Printf("\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!OUTPUT2>> %v <<<\n\n\n", oerr.String())
+
 	// successful here
 	ir[successKey] = true
 
@@ -167,12 +170,16 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 		}
 	}
 
+	// fmt.Printf("\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!OUTPUT3 %v\n\n\n", string(b))
+
 	var rj interface{}
 	err = json.Unmarshal(b, &rj)
 	if err != nil {
 		rj = apps.ToJSON(string(b))
 	}
 	ir[resultKey] = rj
+
+	// fmt.Printf("\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!OUTPUT4 %v\n\n\n", rj)
 
 	return ir, nil
 

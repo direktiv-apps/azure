@@ -39,7 +39,7 @@ func init() {
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run azure in Direktiv as a function",
+      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the followinf extensions are already installed:\n- ssh - containerapp - k8s-configuration - k8s-extension - k8sconfiguration - connectedk8s - connectedmachine - connectedvmware\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -215,8 +215,12 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: 'jq(.secrets.azureUser)'\n        password: 'jq(.secrets.azurePassword)'\n        tenant: 'jq(.secrets.azureTenantID)'\n      commands:\n      - command: az vm list --output json",
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    input: \n      commands:\n      - command: Example of running azure",
             "title": "Basic"
+          },
+          {
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    input: \n      files:\n      - name: hello.txt\n        data: Hello World\n        mode: '0755'\n      commands:\n      - command: Example of running azure",
+            "title": "Advanced"
           }
         ],
         "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/apps/azure:1.0\n  type: knative-workflow",
@@ -304,7 +308,7 @@ func init() {
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run azure in Direktiv as a function",
+      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the followinf extensions are already installed:\n- ssh - containerapp - k8s-configuration - k8s-extension - k8sconfiguration - connectedk8s - connectedmachine - connectedvmware\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -396,8 +400,12 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input: \n      auth:\n        user: 'jq(.secrets.azureUser)'\n        password: 'jq(.secrets.azurePassword)'\n        tenant: 'jq(.secrets.azureTenantID)'\n      commands:\n      - command: az vm list --output json",
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    input: \n      commands:\n      - command: Example of running azure",
             "title": "Basic"
+          },
+          {
+            "content": "- id: azure\n  type: action\n  action:\n    function: azure\n    input: \n      files:\n      - name: hello.txt\n        data: Hello World\n        mode: '0755'\n      commands:\n      - command: Example of running azure",
+            "title": "Advanced"
           }
         ],
         "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/apps/azure:1.0\n  type: knative-workflow",
