@@ -26,7 +26,7 @@ Scenario: get request
 		"commands": [
 		
 		{
-			"command": "az containerapp env show --name del8 --resource-group app-svc",
+			"command": "az vm list",
 			"silent": false,
 			"print": true,
 		}

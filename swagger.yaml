@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Run azure in Direktiv
+  description: Run Microsoft's Azure CLI in Direktiv.
   title: azure
   version: "1.0"
   x-direktiv-meta:
@@ -10,14 +10,15 @@ info:
     issues: https://github.com/direktiv-apps/azure/issues
     url: https://github.com/direktiv-apps/azure  
     categories:
-    - unknown
+    - cloud
+    - azure
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
       This function provides Azure's cli. The supported authentication mechanism is via service principal. 
       This requires user and tenant ID and a secret. How to create a service principal for Azure is explained 
       [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal).
-      If extensions are needed they are downloaded automatically and the followinf extensions are already installed:
+      If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:
 
       - ssh
 
@@ -37,8 +38,8 @@ info:
 
 
       The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.
-      If commands a long running Azure cli presents a "progress bar" in Stdout. In this case the response is not JSON because 
-      there are strings printed into the Stdout stream. In this case run the command to create and then a second to describe the 
+      If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because 
+      strings printed into the stdout stream. In this case run the command to create and then a second to describe the 
       created entity.
 consumes:
 - application/json
@@ -113,7 +114,7 @@ paths:
                     command:
                       type: string
                       description: Command to run
-                      # ADD EXAMPLE HERE
+                      example: az vm list
                     silent: 
                       type: boolean
                       description: If set to false the command will not print output to logs.
@@ -139,22 +140,14 @@ paths:
               type: action
               action:
                 function: azure
+                secrets: ["azureUser", "azurePassword", "azureTenantID"]
                 input: 
+                  auth:
+                    user: jq(.secrets.azureUser)
+                    password: jq(.secrets.azurePassword)
+                    tenant: jq(.secrets.azureTenantID)
                   commands:
-                  - command: Example of running azure
-        - title: Advanced
-          content: |-
-            - id: azure
-              type: action
-              action:
-                function: azure
-                input: 
-                  files:
-                  - name: hello.txt
-                    data: Hello World
-                    mode: '0755'
-                  commands:
-                  - command: Example of running azure
+                  - command: az vm list
       x-direktiv-secrets:
         - name: azureUser
           description: User ID of the app for the service 
@@ -166,6 +159,8 @@ paths:
           description: Tenant ID provided by Azure. 
       x-direktiv:  
         cmds:
+        - action: exec
+          exec: echo login in to azure
         - action: exec
           exec: az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}
           print: false
@@ -179,7 +174,7 @@ paths:
           continue: '{{ .Item.Continue }}'
         output: |
           {
-            "azure": {{ index . 1 | toJson }}
+            "azure": {{ index . 2 | toJson }}
           }
       x-direktiv-errors:
         io.direktiv.command.error: Command execution failed
@@ -190,9 +185,16 @@ paths:
           description: List of executed commands.
           examples:
             azure:
-            - result: # EXAMPLE RESULT HERE
-              success: true
-            - result: #  EXAMPLE RESULT HERE
+            - result: 
+              - additionalCapabilities:
+                applicationProfile:
+                availabilitySet:
+                billingProfile:
+                capacityReservation:
+                diagnosticsProfile:
+                  bootDiagnostics:
+                    enabled: false
+                    storageUri:
               success: true
           schema:
             type: object

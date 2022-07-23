@@ -18,6 +18,7 @@ import (
 type PostParamsBodyCommandsItems struct {
 
 	// Command to run
+	// Example: az vm list
 	Command string `json:"command,omitempty"`
 
 	// Stops excecution if command fails, otherwise proceeds with next command

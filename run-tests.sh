@@ -20,4 +20,4 @@ if [[ -z "${DIREKTIV_SECRET_azureTenantID}" ]]; then
 	exit 1
 fi
 
-docker run --network=host -v `pwd`/tests/:/tests karate java -DtestURL=${DIREKTIV_TEST_URL} -Dlogback.configurationFile=/logging.xml -DazureUser="${DIREKTIV_SECRET_azureUser}" -DazurePassword="${DIREKTIV_SECRET_azurePassword}" -DazureTenantID="${DIREKTIV_SECRET_azureTenantID}"  -jar /karate.jar /tests/v1.0/karate.yaml.test.feature
+docker run --network=host -v `pwd`/tests/:/tests direktiv/karate java -DtestURL=${DIREKTIV_TEST_URL} -Dlogback.configurationFile=/logging.xml -DazureUser="${DIREKTIV_SECRET_azureUser}" -DazurePassword="${DIREKTIV_SECRET_azurePassword}" -DazureTenantID="${DIREKTIV_SECRET_azureTenantID}"  -jar /karate.jar /tests/v1.0/karate.yaml.test.feature

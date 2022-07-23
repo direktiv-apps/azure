@@ -1,10 +1,10 @@
 
 # azure 1.0
 
-Run azure in Direktiv
+Run Microsoft's Azure CLI in Direktiv.
 
 ---
-- #### Categories: unknown
+- #### Categories: cloud, azure
 - #### Image: gcr.io/direktiv/apps/azure 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/azure/issues
@@ -14,7 +14,7 @@ Run azure in Direktiv
 
 ## About azure
 
-This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the followinf extensions are already installed:
+This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:
 - ssh
 - containerapp
 - k8s-configuration
@@ -24,7 +24,7 @@ This function provides Azure's cli. The supported authentication mechanism is vi
 - connectedmachine
 - connectedvmware
 
-The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in Stdout. In this case the response is not JSON because  there are strings printed into the Stdout stream. In this case run the command to create and then a second to describe the  created entity.
+The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.
 
 ### Example(s)
   #### Function Configuration
@@ -40,23 +40,14 @@ functions:
   type: action
   action:
     function: azure
+    secrets: ["azureUser", "azurePassword", "azureTenantID"]
     input: 
+      auth:
+        user: jq(.secrets.azureUser)
+        password: jq(.secrets.azurePassword)
+        tenant: jq(.secrets.azureTenantID)
       commands:
-      - command: Example of running azure
-```
-   #### Advanced
-```yaml
-- id: azure
-  type: action
-  action:
-    function: azure
-    input: 
-      files:
-      - name: hello.txt
-        data: Hello World
-        mode: '0755'
-      commands:
-      - command: Example of running azure
+      - command: az vm list
 ```
 
    ### Secrets
@@ -90,11 +81,21 @@ functions:
 ```json
 [
   {
-    "result": null,
-    "success": true
-  },
-  {
-    "result": null,
+    "result": [
+      {
+        "additionalCapabilities": null,
+        "applicationProfile": null,
+        "availabilitySet": null,
+        "billingProfile": null,
+        "capacityReservation": null,
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": false,
+            "storageUri": null
+          }
+        }
+      }
+    ],
     "success": true
   }
 ]
@@ -176,7 +177,7 @@ functions:
 
 | Name | Type | Go type | Required | Default | Description | Example |
 |------|------|---------|:--------:| ------- |-------------|---------|
-| command | string| `string` |  | | Command to run |  |
+| command | string| `string` |  | | Command to run | `az vm list` |
 | continue | boolean| `bool` |  | | Stops excecution if command fails, otherwise proceeds with next command |  |
 | print | boolean| `bool` |  | `true`| If set to false the command will not print the full command with arguments to logs. |  |
 | silent | boolean| `bool` |  | | If set to false the command will not print output to logs. |  |

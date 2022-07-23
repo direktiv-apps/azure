@@ -85,7 +85,7 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	responses = append(responses, ret)
 
 	// if foreach returns an error there is no continue
-	cont = convertTemplateToBool("false", accParams, true)
+	cont = convertTemplateToBool("<no value>", accParams, true)
 	// cont = convertTemplateToBool("<no value>", accParams, true)
 
 	if err != nil && !cont {
@@ -113,6 +113,34 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	responses = append(responses, ret)
 
 	// if foreach returns an error there is no continue
+	cont = convertTemplateToBool("false", accParams, true)
+	// cont = convertTemplateToBool("<no value>", accParams, true)
+
+	if err != nil && !cont {
+
+		errName := cmdErr
+
+		// if the delete function added the cancel tag
+		ci, ok := sm.Load(*params.DirektivActionID)
+		if ok {
+			cinfo, ok := ci.(*ctxInfo)
+			if ok && cinfo.cancelled {
+				errName = "direktiv.actionCancelled"
+				err = fmt.Errorf("action got cancel request")
+			}
+		}
+
+		return generateError(errName, err)
+	}
+
+	paramsCollector = append(paramsCollector, ret)
+	accParams.Commands = paramsCollector
+
+	ret, err = runCommand2(ctx, accParams, ri)
+
+	responses = append(responses, ret)
+
+	// if foreach returns an error there is no continue
 	cont = false
 
 	if err != nil && !cont {
@@ -136,7 +164,7 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	accParams.Commands = paramsCollector
 
 	s, err := templateString(`{
-  "azure": {{ index . 1 | toJson }}
+  "azure": {{ index . 2 | toJson }}
 }
 `, responses)
 	if err != nil {
@@ -169,6 +197,39 @@ func runCommand0(ctx context.Context,
 		params.DirektivDir,
 	}
 
+	cmd, err := templateString(`echo login in to azure`, at)
+	if err != nil {
+		ri.Logger().Infof("error executing command: %v", err)
+		ir[resultKey] = err.Error()
+		return ir, err
+	}
+	cmd = strings.Replace(cmd, "\n", "", -1)
+
+	silent := convertTemplateToBool("<no value>", at, false)
+	print := convertTemplateToBool("<no value>", at, true)
+	output := ""
+
+	envs := []string{}
+
+	return runCmd(ctx, cmd, envs, output, silent, print, ri)
+
+}
+
+// end commands
+
+// exec
+func runCommand1(ctx context.Context,
+	params accParams, ri *apps.RequestInfo) (map[string]interface{}, error) {
+
+	ir := make(map[string]interface{})
+	ir[successKey] = false
+
+	at := accParamsTemplate{
+		*params.Body,
+		params.Commands,
+		params.DirektivDir,
+	}
+
 	cmd, err := templateString(`az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}`, at)
 	if err != nil {
 		ri.Logger().Infof("error executing command: %v", err)
@@ -190,13 +251,13 @@ func runCommand0(ctx context.Context,
 // end commands
 
 // foreach command
-type LoopStruct1 struct {
+type LoopStruct2 struct {
 	accParams
 	Item        interface{}
 	DirektivDir string
 }
 
-func runCommand1(ctx context.Context,
+func runCommand2(ctx context.Context,
 	params accParams, ri *apps.RequestInfo) ([]map[string]interface{}, error) {
 
 	var cmds []map[string]interface{}
@@ -207,7 +268,7 @@ func runCommand1(ctx context.Context,
 
 	for a := range params.Body.Commands {
 
-		ls := &LoopStruct1{
+		ls := &LoopStruct2{
 			params,
 			params.Body.Commands[a],
 			params.DirektivDir,

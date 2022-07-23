@@ -14,7 +14,7 @@ states:
         tenant: jq(.secrets.azureTenantID)
         user: jq(.secrets.azureUser)
       commands:
-      - command: az vm list --output json
+      - command: az vm list
     secrets:
     - azureUser
     - azurePassword
