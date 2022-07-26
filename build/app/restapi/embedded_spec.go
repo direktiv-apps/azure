@@ -29,7 +29,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Run Microsoft's Azure CLI in Direktiv",
+    "description": "Run Microsoft's Azure CLI in Direktiv.",
     "title": "azure",
     "version": "1.0",
     "x-direktiv-meta": {
@@ -165,11 +165,21 @@ func init() {
             "examples": {
               "azure": [
                 {
-                  "result": null,
-                  "success": true
-                },
-                {
-                  "result": null,
+                  "result": [
+                    {
+                      "additionalCapabilities": null,
+                      "applicationProfile": null,
+                      "availabilitySet": null,
+                      "billingProfile": null,
+                      "capacityReservation": null,
+                      "diagnosticsProfile": {
+                        "bootDiagnostics": {
+                          "enabled": false,
+                          "storageUri": null
+                        }
+                      }
+                    }
+                  ],
                   "success": true
                 }
               ]
@@ -201,7 +211,7 @@ func init() {
               "continue": false,
               "exec": "az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}",
               "print": false,
-              "silent": false
+              "silent": true
             },
             {
               "action": "foreach",
@@ -300,7 +310,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Run Microsoft's Azure CLI in Direktiv",
+    "description": "Run Microsoft's Azure CLI in Direktiv.",
     "title": "azure",
     "version": "1.0",
     "x-direktiv-meta": {
@@ -351,11 +361,21 @@ func init() {
             "examples": {
               "azure": [
                 {
-                  "result": null,
-                  "success": true
-                },
-                {
-                  "result": null,
+                  "result": [
+                    {
+                      "additionalCapabilities": null,
+                      "applicationProfile": null,
+                      "availabilitySet": null,
+                      "billingProfile": null,
+                      "capacityReservation": null,
+                      "diagnosticsProfile": {
+                        "bootDiagnostics": {
+                          "enabled": false,
+                          "storageUri": null
+                        }
+                      }
+                    }
+                  ],
                   "success": true
                 }
               ]
@@ -387,7 +407,7 @@ func init() {
               "continue": false,
               "exec": "az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}",
               "print": false,
-              "silent": false
+              "silent": true
             },
             {
               "action": "foreach",

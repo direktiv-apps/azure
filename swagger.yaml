@@ -164,7 +164,7 @@ paths:
         - action: exec
           exec: az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}
           print: false
-          silent: false
+          silent: true
           continue: false
         - action: foreach
           loop: .Commands

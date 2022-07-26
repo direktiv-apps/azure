@@ -238,7 +238,7 @@ func runCommand1(ctx context.Context,
 	}
 	cmd = strings.Replace(cmd, "\n", "", -1)
 
-	silent := convertTemplateToBool("false", at, false)
+	silent := convertTemplateToBool("true", at, false)
 	print := convertTemplateToBool("false", at, true)
 	output := ""
 

@@ -9,8 +9,8 @@ start:
   event:
     type: io.direktiv.function.test
     context:
-      function: azure
-      version: 1.0
+      function: 'azure'
+      version: '1.0'
 states:
 - id: call-subflow
   type: action

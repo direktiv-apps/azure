@@ -2,7 +2,7 @@
 
 // Package restapi azure
 //
-//  Run Microsoft's Azure CLI in Direktiv
+//  Run Microsoft's Azure CLI in Direktiv.
 //  Schemes:
 //    http
 //  Host: localhost

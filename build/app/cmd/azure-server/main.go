@@ -29,7 +29,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "azure"
-	parser.LongDescription = "Run Microsoft's Azure CLI in Direktiv"
+	parser.LongDescription = "Run Microsoft's Azure CLI in Direktiv."
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {
 		_, err := parser.AddGroup(optsGroup.ShortDescription, optsGroup.LongDescription, optsGroup.Options)
