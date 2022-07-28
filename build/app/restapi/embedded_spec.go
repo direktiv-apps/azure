@@ -35,7 +35,7 @@ func init() {
     "x-direktiv-meta": {
       "categories": [
         "cloud",
-        "azure"
+        "build"
       ],
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
@@ -316,7 +316,7 @@ func init() {
     "x-direktiv-meta": {
       "categories": [
         "cloud",
-        "azure"
+        "build"
       ],
       "container": "gcr.io/direktiv/apps/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
