@@ -4,7 +4,7 @@ info:
   title: azure
   version: "1.0"
   x-direktiv-meta:
-    container: gcr.io/direktiv/apps/azure
+    container: direktiv.azurecr.io/functions/azure
     maintainer: |-
       [direktiv.io](https://www.direktiv.io) 
     issues: https://github.com/direktiv-apps/azure/issues
@@ -39,10 +39,7 @@ info:
 
       The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.
       If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because 
-      strings printed into the stdout stream. In this case run the command to create and then a second to describe the 
-      created entity.
-consumes:
-- application/json
+      strings printed intogcr.io/direktiv/apps
 produces:
 - application/json
 schemes:
@@ -130,7 +127,7 @@ paths:
       x-direktiv-function: |-
         functions:
         - id: azure
-          image: gcr.io/direktiv/apps/azure:1.0
+          image: direktiv.azurecr.io/functions/azure:1.0
           type: knative-workflow
       x-direktiv-examples:
         # ADD MORE EXAMPLES HERE

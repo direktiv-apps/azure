@@ -4,8 +4,8 @@
 Run Microsoft's Azure CLI in Direktiv.
 
 ---
-- #### Categories: cloud, azure
-- #### Image: gcr.io/direktiv/apps/azure 
+- #### Categories: cloud, build
+- #### Image: direktiv.azurecr.io/functions/azure 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/azure/issues
 - #### URL: https://github.com/direktiv-apps/azure
@@ -24,14 +24,14 @@ This function provides Azure's cli. The supported authentication mechanism is vi
 - connectedmachine
 - connectedvmware
 
-The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.
+The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed intogcr.io/direktiv/apps
 
 ### Example(s)
   #### Function Configuration
 ```yaml
 functions:
 - id: azure
-  image: gcr.io/direktiv/apps/azure:1.0
+  image: direktiv.azurecr.io/functions/azure:1.0
   type: knative-workflow
 ```
    #### Basic

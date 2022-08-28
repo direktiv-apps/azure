@@ -18,9 +18,6 @@ var (
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
-  "consumes": [
-    "application/json"
-  ],
   "produces": [
     "application/json"
   ],
@@ -37,10 +34,10 @@ func init() {
         "cloud",
         "build"
       ],
-      "container": "gcr.io/direktiv/apps/azure",
+      "container": "direktiv.azurecr.io/functions/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.",
+      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed intogcr.io/direktiv/apps",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -235,7 +232,7 @@ func init() {
             "title": "Basic"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/apps/azure:1.0\n  type: knative-workflow",
+        "x-direktiv-function": "functions:\n- id: azure\n  image: direktiv.azurecr.io/functions/azure:1.0\n  type: knative-workflow",
         "x-direktiv-secrets": [
           {
             "description": "User ID of the app for the service",
@@ -299,9 +296,6 @@ func init() {
   }
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
-  "consumes": [
-    "application/json"
-  ],
   "produces": [
     "application/json"
   ],
@@ -318,10 +312,10 @@ func init() {
         "cloud",
         "build"
       ],
-      "container": "gcr.io/direktiv/apps/azure",
+      "container": "direktiv.azurecr.io/functions/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.",
+      "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed intogcr.io/direktiv/apps",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/azure"
     }
@@ -431,7 +425,7 @@ func init() {
             "title": "Basic"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/apps/azure:1.0\n  type: knative-workflow",
+        "x-direktiv-function": "functions:\n- id: azure\n  image: direktiv.azurecr.io/functions/azure:1.0\n  type: knative-workflow",
         "x-direktiv-secrets": [
           {
             "description": "User ID of the app for the service",
