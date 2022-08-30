@@ -36,10 +36,57 @@ info:
       
       - connectedvmware
 
+      - aks-preview
+
+      - application-insights
+
+      - appservice-kube
+
+      - automation
+
+      - azure-batch-cli-extensions
+
+      - azure-devops
+
+      - azure-firewall
+
+      - cloud-service
+
+      - containerapp-compose
+
+      - eventgrid
+
+      - front-door
+
+      - functionapp
+
+      - guestconfig
+
+      - init
+
+      - notification-hub
+
+      - peering
+
+      - serial-console
+
+      - virtual-network-manager
+
+      - virtual-network-tap
+
+      - virtual-wan
+
+      - vmware
+
+      - webapp
+
+      - webpubsub
+
 
       The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'.
       If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because 
-      strings printed intogcr.io/direktiv/apps
+      strings printed into the stdout stream. In this case run the command to create and then a second to describe the 
+      created entity.
 produces:
 - application/json
 schemes:
@@ -158,6 +205,7 @@ paths:
         cmds:
         - action: exec
           exec: echo login in to azure
+          continue: false
         - action: exec
           exec: az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password }} --tenant={{ .Auth.Tenant }}
           print: false

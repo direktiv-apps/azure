@@ -8,7 +8,7 @@ Background:
 * def azureTenantID = karate.properties['azureTenantID']
 * configure readTimeout = 240000
 
-Scenario: get request
+Scenario: listvm
 
 	Given url karate.properties['testURL']
 
@@ -47,3 +47,40 @@ Scenario: get request
 	}
 	"""
 	
+Scenario: appenv
+
+	Given url karate.properties['testURL']
+
+	And path '/'
+	And header Direktiv-ActionID = 'development'
+	And header Direktiv-TempDir = '/tmp'
+	And request
+	"""
+	{	
+		"auth": {
+			"user": "#(azureUser)",
+			"password": "#(azurePassword)",
+			"tenant": "#(azureTenantID)"
+		},
+		"commands": [
+		{
+			"command": "/usr/local/bin/az extension list",
+			"silent": false,
+			"print": true,
+		}
+		]
+	}
+	"""
+	When method POST
+	Then status 200
+	# 	And match $ ==
+	# """
+	# {
+	# "azure": [
+	# {
+	# 	"result": "#notnull",
+	# 	"success": true
+	# }
+	# ]
+	# }
+	# """

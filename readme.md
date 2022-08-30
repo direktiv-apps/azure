@@ -23,8 +23,31 @@ This function provides Azure's cli. The supported authentication mechanism is vi
 - connectedk8s
 - connectedmachine
 - connectedvmware
+- aks-preview
+- application-insights
+- appservice-kube
+- automation
+- azure-batch-cli-extensions
+- azure-devops
+- azure-firewall
+- cloud-service
+- containerapp-compose
+- eventgrid
+- front-door
+- functionapp
+- guestconfig
+- init
+- notification-hub
+- peering
+- serial-console
+- virtual-network-manager
+- virtual-network-tap
+- virtual-wan
+- vmware
+- webapp
+- webpubsub
 
-The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed intogcr.io/direktiv/apps
+The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.
 
 ### Example(s)
   #### Function Configuration

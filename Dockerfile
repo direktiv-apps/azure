@@ -13,8 +13,10 @@ RUN cd src && \
 
 FROM mcr.microsoft.com/azure-cli:2.38.0
 
-RUN az config set extension.use_dynamic_install=yes_without_prompt
+RUN mkdir /azextensions
+ENV AZURE_EXTENSION_DIR=/azextensions
 
+RUN az config set extension.use_dynamic_install=yes_without_prompt
 RUN az config set core.no_color=true
 RUN az config set core.only_show_errors=true
 
@@ -26,6 +28,29 @@ RUN az extension add --name k8sconfiguration
 RUN az extension add --name connectedk8s
 RUN az extension add --name connectedmachine
 RUN az extension add --name connectedvmware
+RUN az extension add --name aks-preview
+RUN az extension add --name application-insights
+RUN az extension add --name appservice-kube
+RUN az extension add --name automation
+RUN az extension add --name azure-batch-cli-extensions
+RUN az extension add --name azure-devops
+RUN az extension add --name azure-firewall
+RUN az extension add --name cloud-service
+RUN az extension add --name containerapp-compose
+RUN az extension add --name eventgrid
+RUN az extension add --name front-door
+RUN az extension add --name functionapp
+RUN az extension add --name guestconfig
+RUN az extension add --name init
+RUN az extension add --name notification-hub
+RUN az extension add --name peering
+RUN az extension add --name serial-console
+RUN az extension add --name virtual-network-manager
+RUN az extension add --name virtual-network-tap
+RUN az extension add --name virtual-wan
+RUN az extension add --name vmware
+RUN az extension add --name webapp
+RUN az extension add --name webpubsub
 
 RUN az extension list
 

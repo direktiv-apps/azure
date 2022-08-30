@@ -87,7 +87,7 @@ func PostDirektivHandle(params PostParams) middleware.Responder {
 	// if foreach returns an error there is no continue
 	//
 	// default we do not continue
-	cont = convertTemplateToBool("<no value>", accParams, false)
+	cont = convertTemplateToBool("false", accParams, false)
 	// cont = convertTemplateToBool("<no value>", accParams, true)
 	//
 
