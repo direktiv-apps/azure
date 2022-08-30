@@ -73,14 +73,3 @@ Scenario: appenv
 	"""
 	When method POST
 	Then status 200
-	# 	And match $ ==
-	# """
-	# {
-	# "azure": [
-	# {
-	# 	"result": "#notnull",
-	# 	"success": true
-	# }
-	# ]
-	# }
-	# """
