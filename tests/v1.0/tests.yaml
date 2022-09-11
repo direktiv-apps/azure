@@ -2,7 +2,7 @@ url: ""
 functions:
 - type: knative-workflow
   id: azure
-  image: direktiv.azurecr.io/functions/azure:test
+  image: gcr.io/direktiv/functions/azure:test
 states:
 - id: state0
   type: action

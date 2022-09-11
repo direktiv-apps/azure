@@ -4,7 +4,7 @@ info:
   title: azure
   version: "1.0"
   x-direktiv-meta:
-    container: direktiv.azurecr.io/functions/azure
+    container: gcr.io/direktiv/functions/azure
     maintainer: |-
       [direktiv.io](https://www.direktiv.io) 
     issues: https://github.com/direktiv-apps/azure/issues
@@ -174,7 +174,7 @@ paths:
       x-direktiv-function: |-
         functions:
         - id: azure
-          image: direktiv.azurecr.io/functions/azure:1.0
+          image: gcr.io/direktiv/functions/azure:1.0
           type: knative-workflow
       x-direktiv-examples:
         # ADD MORE EXAMPLES HERE

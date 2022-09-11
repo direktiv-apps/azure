@@ -34,7 +34,7 @@ func init() {
         "cloud",
         "build"
       ],
-      "container": "direktiv.azurecr.io/functions/azure",
+      "container": "gcr.io/direktiv/functions/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
       "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n- aks-preview\n- application-insights\n- appservice-kube\n- automation\n- azure-batch-cli-extensions\n- azure-devops\n- azure-firewall\n- cloud-service\n- containerapp-compose\n- eventgrid\n- front-door\n- functionapp\n- guestconfig\n- init\n- notification-hub\n- peering\n- serial-console\n- virtual-network-manager\n- virtual-network-tap\n- virtual-wan\n- vmware\n- webapp\n- webpubsub\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.",
@@ -233,7 +233,7 @@ func init() {
             "title": "Basic"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: azure\n  image: direktiv.azurecr.io/functions/azure:1.0\n  type: knative-workflow",
+        "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/functions/azure:1.0\n  type: knative-workflow",
         "x-direktiv-secrets": [
           {
             "description": "User ID of the app for the service",
@@ -313,7 +313,7 @@ func init() {
         "cloud",
         "build"
       ],
-      "container": "direktiv.azurecr.io/functions/azure",
+      "container": "gcr.io/direktiv/functions/azure",
       "issues": "https://github.com/direktiv-apps/azure/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
       "long-description": "This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:\n- ssh\n- containerapp\n- k8s-configuration\n- k8s-extension\n- k8sconfiguration\n- connectedk8s\n- connectedmachine\n- connectedvmware\n- aks-preview\n- application-insights\n- appservice-kube\n- automation\n- azure-batch-cli-extensions\n- azure-devops\n- azure-firewall\n- cloud-service\n- containerapp-compose\n- eventgrid\n- front-door\n- functionapp\n- guestconfig\n- init\n- notification-hub\n- peering\n- serial-console\n- virtual-network-manager\n- virtual-network-tap\n- virtual-wan\n- vmware\n- webapp\n- webpubsub\n\nThe output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a \"progress bar\" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.",
@@ -427,7 +427,7 @@ func init() {
             "title": "Basic"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: azure\n  image: direktiv.azurecr.io/functions/azure:1.0\n  type: knative-workflow",
+        "x-direktiv-function": "functions:\n- id: azure\n  image: gcr.io/direktiv/functions/azure:1.0\n  type: knative-workflow",
         "x-direktiv-secrets": [
           {
             "description": "User ID of the app for the service",

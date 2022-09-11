@@ -5,7 +5,7 @@ Run Microsoft's Azure CLI in Direktiv.
 
 ---
 - #### Categories: cloud, build
-- #### Image: direktiv.azurecr.io/functions/azure 
+- #### Image: gcr.io/direktiv/functions/azure 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/azure/issues
 - #### URL: https://github.com/direktiv-apps/azure
@@ -54,7 +54,7 @@ The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can
 ```yaml
 functions:
 - id: azure
-  image: direktiv.azurecr.io/functions/azure:1.0
+  image: gcr.io/direktiv/functions/azure:1.0
   type: knative-workflow
 ```
    #### Basic
