@@ -1,0 +1,240 @@
+openapi: 3.0.1
+info:
+  title: azure
+  description: Run Microsoft's Azure CLI in Direktiv.
+  version: "1.0"
+  x-direktiv-meta:
+    container: gcr.io/direktiv/functions/azure
+    maintainer: "[direktiv.io](https://www.direktiv.io) "
+    issues: https://github.com/direktiv-apps/azure/issues
+    url: https://github.com/direktiv-apps/azure
+    categories:
+    - cloud
+    - build
+    license: "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)"
+    long-description: |-
+      This function provides Azure's cli. The supported authentication mechanism is via service principal.  This requires user and tenant ID and a secret. How to create a service principal for Azure is explained  [Microsoft's Documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal). If extensions are needed they are downloaded automatically and the following extensions are already pre-installed:
+      - ssh
+      - containerapp
+      - k8s-configuration
+      - k8s-extension
+      - k8sconfiguration
+      - connectedk8s
+      - connectedmachine
+      - connectedvmware
+      - aks-preview
+      - application-insights
+      - appservice-kube
+      - automation
+      - azure-batch-cli-extensions
+      - azure-devops
+      - azure-firewall
+      - cloud-service
+      - containerapp-compose
+      - eventgrid
+      - front-door
+      - functionapp
+      - guestconfig
+      - init
+      - notification-hub
+      - peering
+      - serial-console
+      - virtual-network-manager
+      - virtual-network-tap
+      - virtual-wan
+      - vmware
+      - webapp
+      - webpubsub
+
+      The output is set to JSON via the environment variable AZURE_CORE_OUTPUT but can be overwritten with '--output'. If commands a long running Azure cli presents a "progress bar" in stdout. In this case the response is not JSON because  strings printed into the stdout stream. In this case run the command to create and then a second to describe the  created entity.
+servers:
+- url: /
+paths:
+  /:
+    post:
+      parameters:
+      - name: Direktiv-ActionID
+        in: header
+        description: "direktiv action id is an UUID. \nFor development it can be set\
+          \ to 'development'\n"
+        schema:
+          type: string
+          default: development
+      - name: Direktiv-TempDir
+        in: header
+        description: |
+          direktiv temp dir is the working directory for that request
+          For development it can be set to e.g. '/tmp'
+        schema:
+          type: string
+          default: /tmp
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              required:
+              - auth
+              type: object
+              properties:
+                files:
+                  type: array
+                  description: File to create before running commands.
+                  items:
+                    $ref: '#/components/schemas/direktivFile'
+                auth:
+                  required:
+                  - password
+                  - tenant
+                  - user
+                  type: object
+                  properties:
+                    user:
+                      type: string
+                      description: The application ID of the app registration for
+                        the principal
+                      example: a433dd122-bcdf-1605-160b-09717b123456
+                    password:
+                      type: string
+                      description: The secret created under "Certificates & Secrets"
+                      example: S0m3~Cr8zy~P855word
+                    tenant:
+                      type: string
+                      description: Azure tenant ID
+                      example: a433dd122-bcdf-1605-160b-09717b123456
+                commands:
+                  type: array
+                  description: Array of commands.
+                  items:
+                    type: object
+                    properties:
+                      command:
+                        type: string
+                        description: Command to run
+                        example: az vm list
+                      silent:
+                        type: boolean
+                        description: If set to false the command will not print output
+                          to logs.
+                        default: false
+                      print:
+                        type: boolean
+                        description: If set to false the command will not print the
+                          full command with arguments to logs.
+                        default: true
+                      continue:
+                        type: boolean
+                        description: "Stops excecution if command fails, otherwise\
+                          \ proceeds with next command"
+        required: false
+      responses:
+        "200":
+          description: List of executed commands.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  azure:
+                    type: array
+                    items:
+                      required:
+                      - result
+                      - success
+                      type: object
+                      properties:
+                        success:
+                          type: boolean
+                        result:
+                          type: object
+            azure:
+              example:
+              - result:
+                - additionalCapabilities: null
+                  applicationProfile: null
+                  availabilitySet: null
+                  billingProfile: null
+                  capacityReservation: null
+                  diagnosticsProfile:
+                    bootDiagnostics:
+                      enabled: false
+                      storageUri: null
+                success: true
+        default:
+          description: generic error response
+          headers:
+            Direktiv-ErrorMessage:
+              schema:
+                type: string
+            Direktiv-ErrorCode:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-direktiv-function: |-
+        functions:
+        - id: azure
+          image: gcr.io/direktiv/functions/azure:1.0
+          type: knative-workflow
+      x-direktiv-examples:
+      - title: Basic
+        content: "- id: azure\n  type: action\n  action:\n    function: azure\n  \
+          \  secrets: [\"azureUser\", \"azurePassword\", \"azureTenantID\"]\n    input:\
+          \ \n      auth:\n        user: jq(.secrets.azureUser)\n        password:\
+          \ jq(.secrets.azurePassword)\n        tenant: jq(.secrets.azureTenantID)\n\
+          \      commands:\n      - command: az vm list"
+      x-direktiv-secrets:
+      - name: azureUser
+        description: User ID of the app for the service
+      - name: azurePassword
+        description: 'The password is the token generated in "Certificates & secrets"
+          in "App registrations". The app needs to have a role assigned in the subscription
+          to work. '
+      - name: azureTenantID
+        description: Tenant ID provided by Azure.
+      x-direktiv:
+        cmds:
+        - action: exec
+          exec: echo login in to azure
+          continue: false
+        - action: exec
+          exec: "az login --service-principal -u={{ .Auth.User }} -p={{ .Auth.Password\
+            \ }} --tenant={{ .Auth.Tenant }}"
+          print: false
+          silent: true
+          continue: false
+        - action: foreach
+          loop: .Commands
+          exec: "{{ .Item.Command }}"
+          silent: "{{ .Item.Silent }}"
+          print: "{{ .Item.Print }}"
+          continue: "{{ .Item.Continue }}"
+        output: |
+          {
+            "azure": {{ index . 2 | toJson }}
+          }
+      x-direktiv-errors:
+        io.direktiv.command.error: Command execution failed
+        io.direktiv.output.error: Template error for output generation of the service
+        io.direktiv.ri.error: Can not create information object from request
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    direktivFile:
+      type: object
+      x-go-type:
+        type: DirektivFile
+        import:
+          package: github.com/direktiv/apps/go/pkg/apps
+    error:
+      required:
+      - errorCode
+      - errorMessage
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+
